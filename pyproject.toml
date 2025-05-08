@@ -11,7 +11,7 @@ requires-python = ">=3.8"
 license = "MIT"
 keywords = ["mcdm", "decision-making", "fuzzy-sets", "topsis", "mabac", "cimas"]
 authors = [
-    { name = "Your Name", email = "your.email@example.com" }
+    { name = "MoBakour", email = "mo.bakour@outlook.com" }
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -42,10 +42,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/mcdm-kit"
-Documentation = "https://mcdm-kit.readthedocs.io/"
+Homepage = "https://github.com/MoBakour/mcdm-kit"
+Documentation = ""
 Repository = "https://github.com/yourusername/mcdm-kit.git"
-Issues = "https://github.com/yourusername/mcdm-kit/issues"
+Issues = "https://github.com/MoBakour/mcdm-kit/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

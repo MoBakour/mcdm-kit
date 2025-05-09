@@ -1,0 +1,442 @@
+# MCDM Kit Comprehensive Documentation
+
+This document provides a complete reference for the MCDM Kit library, including all MCDM methods, fuzzy set types, utilities, and data handling capabilities.
+
+## Table of Contents
+
+1. [Core Components](#core-components)
+    - [DecisionMatrix](#decisionmatrix)
+    - [Base MCDM Method](#base-mcdm-method)
+2. [MCDM Methods](#mcdm-methods)
+    - [TOPSIS](#topsis)
+    - [WISP](#wisp)
+    - [CIMAS](#cimas)
+    - [ARTASI](#artasi)
+    - [WENSLO](#wenslo)
+    - [MABAC](#mabac)
+    - [ARLON](#arlon)
+    - [DEMATEL](#dematel)
+    - [AROMAN](#aroman)
+3. [Fuzzy Set Types](#fuzzy-set-types)
+    - [Base Fuzzy Set](#base-fuzzy-set)
+    - [Picture Fuzzy Sets](#picture-fuzzy-sets)
+    - [Interval Fuzzy Sets](#interval-fuzzy-sets)
+    - [Fermatean Fuzzy Sets](#fermatean-fuzzy-sets)
+    - [Hesitant Fuzzy Sets](#hesitant-fuzzy-sets)
+    - [Intuitionistic Fuzzy Sets](#intuitionistic-fuzzy-sets)
+    - [Pythagorean Fuzzy Sets](#pythagorean-fuzzy-sets)
+    - [Spherical Fuzzy Sets](#spherical-fuzzy-sets)
+    - [Neutrosophic Sets](#neutrosophic-sets)
+    - [Type-2 Fuzzy Sets](#type-2-fuzzy-sets)
+4. [Utilities](#utilities)
+    - [Distance Calculations](#distance-calculations)
+    - [Normalization Methods](#normalization-methods)
+5. [Data Handling](#data-handling)
+    - [Data Loading](#data-loading)
+    - [Matrix Operations](#matrix-operations)
+
+## Core Components
+
+### DecisionMatrix
+
+The `DecisionMatrix` class is the fundamental data structure for all MCDM operations.
+
+#### Constructor Parameters
+
+```python
+DecisionMatrix(
+    decision_matrix: Union[np.ndarray, List[List[Any]]],
+    alternatives: Optional[List[str]] = None,
+    criteria: Optional[List[str]] = None,
+    criteria_types: Optional[List[str]] = None,
+    weights: Optional[List[float]] = None,
+    fuzzy: Optional[Union[str, Type[BaseFuzzySet]]] = None
+)
+```
+
+-   `decision_matrix`: Input matrix (numpy array or list of lists)
+-   `alternatives`: List of alternative names (optional)
+-   `criteria`: List of criterion names (optional)
+-   `criteria_types`: List of criterion types ('benefit' or 'cost') (optional)
+-   `weights`: List of criterion weights (optional)
+-   `fuzzy`: Fuzzy set type (string or class) (optional)
+
+#### Methods
+
+-   `get_matrix()`: Returns the decision matrix
+-   `get_weights()`: Returns the criterion weights
+-   `get_criteria_types()`: Returns the criterion types
+-   `get_alternatives()`: Returns the alternative names
+-   `get_criteria()`: Returns the criterion names
+-   `get_fuzzy_details()`: Returns detailed fuzzy set information
+-   `get_fuzzy_distances()`: Returns distances between fuzzy sets
+-   `validate()`: Validates the decision matrix structure
+-   `normalize(method: str = 'vector')`: Normalizes the decision matrix
+-   `apply_weights()`: Applies weights to the decision matrix
+
+### Base MCDM Method
+
+The `BaseMCDMMethod` class provides common functionality for all MCDM methods.
+
+#### Constructor Parameters
+
+```python
+BaseMCDMMethod(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None
+)
+```
+
+#### Common Methods
+
+-   `validate_inputs()`: Validates input parameters
+-   `normalize_matrix()`: Normalizes the decision matrix
+-   `calculate_weighted_matrix()`: Calculates weighted normalized matrix
+-   `rank()`: Ranks alternatives (to be implemented by subclasses)
+
+## MCDM Methods
+
+### TOPSIS
+
+**Technique for Order of Preference by Similarity to Ideal Solution**
+
+#### Constructor Parameters
+
+```python
+TOPSIS(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector'
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_weighted_matrix()`: Applies weights to normalized matrix
+-   `calculate_ideal_solutions()`: Determines ideal and anti-ideal solutions
+-   `calculate_distances()`: Computes distances to ideal solutions
+-   `calculate_scores()`: Calculates relative closeness coefficients
+-   `rank()`: Returns rankings and scores
+
+### WISP
+
+**Weighted Integrated Score Performance**
+
+#### Constructor Parameters
+
+```python
+WISP(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector',
+    performance_thresholds: Optional[List[float]] = None
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_performance_scores()`: Computes performance scores
+-   `calculate_weighted_scores()`: Applies weights to performance scores
+-   `rank()`: Returns rankings and scores
+
+### CIMAS
+
+**Criterion Impact MeAsurement System**
+
+#### Constructor Parameters
+
+```python
+CIMAS(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector'
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_impact_matrix()`: Computes criterion impact matrix
+-   `calculate_weighted_impacts()`: Applies weights to impacts
+-   `rank()`: Returns rankings and impact scores
+
+### ARTASI
+
+**Additive Ratio Transition to Aspiration Solution Integration**
+
+#### Constructor Parameters
+
+```python
+ARTASI(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector',
+    aspiration_levels: Optional[List[float]] = None
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_aspiration_distances()`: Computes distances to aspiration levels
+-   `calculate_weighted_distances()`: Applies weights to distances
+-   `rank()`: Returns rankings and distance scores
+
+### WENSLO
+
+**WEighted Navigation of Standard Level Origins**
+
+#### Constructor Parameters
+
+```python
+WENSLO(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector',
+    standard_levels: Optional[List[float]] = None
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_standard_distances()`: Computes distances to standard levels
+-   `calculate_weighted_distances()`: Applies weights to distances
+-   `rank()`: Returns rankings and distance scores
+
+### MABAC
+
+**Multi-Attributive Border Approximation area Comparison**
+
+#### Constructor Parameters
+
+```python
+MABAC(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector'
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_border_area()`: Computes border approximation area
+-   `calculate_distances()`: Computes distances to border area
+-   `rank()`: Returns rankings and distance scores
+
+### ARLON
+
+**Aggregated Ranking of Level-based Ordinal Normalization**
+
+#### Constructor Parameters
+
+```python
+ARLON(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None,
+    normalization_method: str = 'vector',
+    levels: int = 5
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using specified method
+-   `calculate_ordinal_levels()`: Computes ordinal levels
+-   `calculate_weighted_levels()`: Applies weights to levels
+-   `rank()`: Returns rankings and level scores
+
+### DEMATEL
+
+**DEcision MAking Trial and Evaluation Laboratory**
+
+#### Constructor Parameters
+
+```python
+DEMATEL(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    threshold: Optional[float] = None,
+    alpha: float = 0.1
+)
+```
+
+#### Methods
+
+-   `calculate_direct_relation_matrix()`: Computes direct relation matrix
+-   `calculate_normalized_matrix()`: Normalizes relation matrix
+-   `calculate_total_relation_matrix()`: Computes total relation matrix
+-   `calculate_prominence_relation()`: Computes prominence and relation
+-   `rank()`: Returns rankings and influence scores
+
+### AROMAN
+
+**Additive Ratio Assessment with Multiple Criteria**
+
+#### Constructor Parameters
+
+```python
+AROMAN(
+    decision_matrix: Union[DecisionMatrix, np.ndarray],
+    weights: Optional[List[float]] = None,
+    criteria_types: Optional[List[str]] = None
+)
+```
+
+#### Methods
+
+-   `normalize_matrix()`: Normalizes using vector normalization
+-   `calculate_weighted_matrix()`: Applies weights to normalized matrix
+-   `calculate_ideal_solutions()`: Determines ideal and anti-ideal solutions
+-   `calculate_scores()`: Computes relative closeness coefficients
+-   `rank()`: Returns rankings and scores
+
+## Fuzzy Set Types
+
+### Base Fuzzy Set
+
+The `BaseFuzzySet` class provides common functionality for all fuzzy set types.
+
+#### Common Methods
+
+-   `validate()`: Validates fuzzy set parameters
+-   `get_membership()`: Returns membership degree
+-   `get_non_membership()`: Returns non-membership degree
+-   `get_hesitation()`: Returns hesitation degree
+-   `distance(other: BaseFuzzySet)`: Calculates distance to another fuzzy set
+
+### Picture Fuzzy Sets
+
+```python
+PictureFuzzySet(
+    membership: float,
+    neutral: float,
+    non_membership: float
+)
+```
+
+### Interval Fuzzy Sets
+
+```python
+IntervalFuzzySet(
+    membership_lower: float,
+    membership_upper: float,
+    non_membership_lower: float,
+    non_membership_upper: float
+)
+```
+
+### Fermatean Fuzzy Sets
+
+```python
+FermateanFuzzySet(
+    membership: float,
+    non_membership: float
+)
+```
+
+### Hesitant Fuzzy Sets
+
+```python
+HesitantFuzzySet(
+    membership_values: List[float]
+)
+```
+
+### Intuitionistic Fuzzy Sets
+
+```python
+IntuitionisticFuzzySet(
+    membership: float,
+    non_membership: float
+)
+```
+
+### Pythagorean Fuzzy Sets
+
+```python
+PythagoreanFuzzySet(
+    membership: float,
+    non_membership: float
+)
+```
+
+### Spherical Fuzzy Sets
+
+```python
+SphericalFuzzySet(
+    membership: float,
+    neutral: float,
+    non_membership: float
+)
+```
+
+### Neutrosophic Sets
+
+```python
+NeutrosophicSet(
+    truth: float,
+    indeterminacy: float,
+    falsity: float
+)
+```
+
+### Type-2 Fuzzy Sets
+
+```python
+Type2FuzzySet(
+    primary_membership: float,
+    secondary_membership: float,
+    footprint_of_uncertainty: Tuple[float, float]
+)
+```
+
+## Utilities
+
+### Distance Calculations
+
+-   `euclidean_distance(x: np.ndarray, y: np.ndarray)`: Euclidean distance
+-   `manhattan_distance(x: np.ndarray, y: np.ndarray)`: Manhattan distance
+-   `hamming_distance(x: np.ndarray, y: np.ndarray)`: Hamming distance
+-   `cosine_similarity(x: np.ndarray, y: np.ndarray)`: Cosine similarity
+-   `fuzzy_distance(x: np.ndarray, y: np.ndarray, p: float = 2)`: Fuzzy distance
+-   `weighted_distance(x: np.ndarray, y: np.ndarray, weights: np.ndarray, p: float = 2)`: Weighted distance
+
+### Normalization Methods
+
+-   `normalize_matrix(matrix: np.ndarray, criteria_types: List[str], method: str = 'vector')`: Matrix normalization
+-   `_vector_normalization(matrix: np.ndarray)`: Vector normalization
+-   `_minmax_normalization(matrix: np.ndarray, criteria_types: List[str])`: Min-max normalization
+-   `_sum_normalization(matrix: np.ndarray, criteria_types: List[str])`: Sum normalization
+
+## Data Handling
+
+### Data Loading
+
+```python
+load_from_csv(
+    filepath: str,
+    alternatives_col: str = 'Alternative',
+    criteria_cols: List[str] = None,
+    criteria_types: List[str] = None,
+    weights: List[float] = None,
+    fuzzy: Optional[Union[str, Type[BaseFuzzySet]]] = None
+)
+```
+
+### Matrix Operations
+
+-   `validate_matrix(matrix: np.ndarray)`: Validates matrix structure
+-   `validate_weights(weights: List[float], n_criteria: int)`: Validates weights
+-   `validate_criteria_types(criteria_types: List[str], n_criteria: int)`: Validates criteria types
+-   `validate_fuzzy_values(matrix: np.ndarray, fuzzy_type: Union[str, Type[BaseFuzzySet]])`: Validates fuzzy values

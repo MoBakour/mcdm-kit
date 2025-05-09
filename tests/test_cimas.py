@@ -30,7 +30,7 @@ def test_cimas_initialization():
     cimas = CIMAS(decision_matrix)
     assert cimas.decision_matrix is decision_matrix
     assert cimas.weights is None
-    assert cimas.normalization_method == 'vector'
+    assert cimas.normalization_method == 'minmax'
     
     # Test initialization with custom weights
     weights = np.array([0.3, 0.2, 0.3, 0.2])
@@ -38,8 +38,8 @@ def test_cimas_initialization():
     assert np.array_equal(cimas.weights, weights)
     
     # Test initialization with custom normalization method
-    cimas = CIMAS(decision_matrix, normalization_method='minmax')
-    assert cimas.normalization_method == 'minmax'
+    cimas = CIMAS(decision_matrix, normalization_method='vector')
+    assert cimas.normalization_method == 'vector'
 
 def test_cimas_calculate_weights():
     """Test weight calculation in CIMAS."""
@@ -101,22 +101,6 @@ def test_cimas_calculate_weighted_matrix():
     assert weighted.shape == matrix.shape
     assert np.all(weighted >= 0)
 
-def test_cimas_calculate_impact_matrix():
-    """Test impact matrix calculation in CIMAS."""
-    matrix = np.array([
-        [4, 3, 5, 2],
-        [3, 4, 2, 5],
-        [5, 3, 4, 3]
-    ])
-    decision_matrix = DecisionMatrix(
-        decision_matrix=matrix,
-        criteria_types=['benefit', 'benefit', 'cost', 'cost']
-    )
-    
-    cimas = CIMAS(decision_matrix)
-    impact = cimas.calculate_impact_matrix()
-    assert impact.shape == matrix.shape
-
 def test_cimas_calculate_scores():
     """Test score calculation in CIMAS."""
     matrix = np.array([
@@ -154,8 +138,8 @@ def test_cimas_rank():
     
     assert 'rankings' in results
     assert 'scores' in results
-    assert 'impact_matrix' in results
     assert 'weighted_matrix' in results
+    assert 'normalized_matrix' in results
     
     rankings = results['rankings']
     assert len(rankings) == 3

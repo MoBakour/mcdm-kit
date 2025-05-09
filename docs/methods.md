@@ -85,7 +85,7 @@ results = wisp.rank()
 
 **Criterion Impact MeAsurement System**
 
-CIMAS is a method that measures the impact of each criterion on the overall decision using specific normalization procedures.
+The CIMAS method ranks alternatives based on their proximity to ideal and anti-ideal solutions using a weighted normalized decision matrix.
 
 ### Key Features
 
@@ -107,7 +107,7 @@ matrix = DecisionMatrix(...)
 cimas = CIMAS(
     decision_matrix=matrix,
     weights=None,  # Optional: provide custom weights
-    normalization_method='vector'  # Optional: choose normalization method
+    normalization_method='minmax'  # Optional: choose normalization method
 )
 
 # Get rankings

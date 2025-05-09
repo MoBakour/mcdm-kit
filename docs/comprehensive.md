@@ -211,7 +211,7 @@ from mcdm_kit.core import CIMAS
 CIMAS(
     decision_matrix: DecisionMatrix,
     weights: Optional[np.ndarray] = None,
-    normalization_method: str = 'vector'
+    normalization_method: str = 'minmax'
 )
 ```
 
@@ -224,7 +224,7 @@ CIMAS(
 -   `calculate_weights()`: Calculate or validate weights for criteria
 -   `normalize_matrix()`: Normalize the decision matrix using CIMAS-specific normalization
 -   `calculate_weighted_matrix()`: Calculate the weighted normalized matrix
--   `calculate_impact_matrix()`: Calculate the impact matrix
+-   `calculate_distances()`: Computes the Manhattan distance of each alternative to the ideal and anti-ideal solution
 -   `calculate_scores()`: Calculate CIMAS scores for each alternative
 -   `rank()`: Rank alternatives based on CIMAS scores
 
@@ -232,7 +232,7 @@ The `rank()` method returns a dictionary containing:
 
 -   `rankings`: List of dictionaries with rank, alternative name, and score
 -   `scores`: Dictionary mapping alternative names to their scores
--   `impact_matrix`: The calculated impact matrix
+-   `normalized_matrix`: The normalized matrix used in ranking (as list of lists)
 -   `weighted_matrix`: The weighted normalized matrix
 
 ### ARTASI

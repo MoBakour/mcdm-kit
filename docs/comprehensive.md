@@ -34,6 +34,8 @@ This document provides a complete reference for the MCDM Kit library, including 
 5. [Data Handling](#data-handling)
     - [Data Loading](#data-loading)
     - [Matrix Operations](#matrix-operations)
+6. [Usage Examples](#usage-examples)
+    - [PFS-CIMAS-ARTASI Example](#pfs-cimas-artasi-usage-example)
 
 ## Core Components
 
@@ -557,6 +559,8 @@ from mcdm_kit.data import (
 -   `validate_weights(weights: List[float], n_criteria: int)`: Validates weights
 -   `validate_criteria_types(criteria_types: List[str], n_criteria: int)`: Validates criteria types
 -   `validate_fuzzy_values(matrix: np.ndarray, fuzzy_type: Union[str, Type[BaseFuzzySet]])`: Validates fuzzy values
+
+## Usage Examples
 
 ### PFS-CIMAS-ARTASI Usage Example
 

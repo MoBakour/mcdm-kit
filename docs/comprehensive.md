@@ -41,6 +41,10 @@ This document provides a complete reference for the MCDM Kit library, including 
 
 The `DecisionMatrix` class is the fundamental data structure for all MCDM operations.
 
+```python
+from mcdm_kit.data import DecisionMatrix
+```
+
 #### Constructor Parameters
 
 ```python
@@ -78,6 +82,10 @@ DecisionMatrix(
 
 The `BaseMCDMMethod` class provides common functionality for all MCDM methods.
 
+```python
+from mcdm_kit.core import BaseMCDMMethod
+```
+
 #### Constructor Parameters
 
 ```python
@@ -100,6 +108,10 @@ BaseMCDMMethod(
 ### TOPSIS
 
 **Technique for Order of Preference by Similarity to Ideal Solution**
+
+```python
+from mcdm_kit.core import TOPSIS
+```
 
 #### Constructor Parameters
 
@@ -125,6 +137,10 @@ TOPSIS(
 
 **Weighted Integrated Score Performance**
 
+```python
+from mcdm_kit.core import WISP
+```
+
 #### Constructor Parameters
 
 ```python
@@ -148,6 +164,10 @@ WISP(
 
 **Criterion Impact MeAsurement System**
 
+```python
+from mcdm_kit.core import CIMAS
+```
+
 #### Constructor Parameters
 
 ```python
@@ -169,6 +189,10 @@ CIMAS(
 ### ARTASI
 
 **Additive Ratio Transition to Aspiration Solution Integration**
+
+```python
+from mcdm_kit.core import ARTASI
+```
 
 #### Constructor Parameters
 
@@ -193,6 +217,10 @@ ARTASI(
 
 **WEighted Navigation of Standard Level Origins**
 
+```python
+from mcdm_kit.core import WENSLO
+```
+
 #### Constructor Parameters
 
 ```python
@@ -216,6 +244,10 @@ WENSLO(
 
 **Multi-Attributive Border Approximation area Comparison**
 
+```python
+from mcdm_kit.core import MABAC
+```
+
 #### Constructor Parameters
 
 ```python
@@ -237,6 +269,10 @@ MABAC(
 ### ARLON
 
 **Aggregated Ranking of Level-based Ordinal Normalization**
+
+```python
+from mcdm_kit.core import ARLON
+```
 
 #### Constructor Parameters
 
@@ -261,6 +297,10 @@ ARLON(
 
 **DEcision MAking Trial and Evaluation Laboratory**
 
+```python
+from mcdm_kit.core import DEMATEL
+```
+
 #### Constructor Parameters
 
 ```python
@@ -282,6 +322,10 @@ DEMATEL(
 ### AROMAN
 
 **Additive Ratio Assessment with Multiple Criteria**
+
+```python
+from mcdm_kit.core import AROMAN
+```
 
 #### Constructor Parameters
 
@@ -307,6 +351,10 @@ AROMAN(
 
 The `BaseFuzzySet` class provides common functionality for all fuzzy set types.
 
+```python
+from mcdm_kit.fuzz import BaseFuzzySet
+```
+
 #### Common Methods
 
 -   `validate()`: Validates fuzzy set parameters
@@ -318,6 +366,10 @@ The `BaseFuzzySet` class provides common functionality for all fuzzy set types.
 ### Picture Fuzzy Sets
 
 ```python
+from mcdm_kit.fuzz import PictureFuzzySet
+```
+
+```python
 PictureFuzzySet(
     membership: float,
     neutral: float,
@@ -326,6 +378,10 @@ PictureFuzzySet(
 ```
 
 ### Interval Fuzzy Sets
+
+```python
+from mcdm_kit.fuzz import IntervalFuzzySet
+```
 
 ```python
 IntervalFuzzySet(
@@ -339,6 +395,10 @@ IntervalFuzzySet(
 ### Fermatean Fuzzy Sets
 
 ```python
+from mcdm_kit.fuzz import FermateanFuzzySet
+```
+
+```python
 FermateanFuzzySet(
     membership: float,
     non_membership: float
@@ -348,12 +408,20 @@ FermateanFuzzySet(
 ### Hesitant Fuzzy Sets
 
 ```python
+from mcdm_kit.fuzz import HesitantFuzzySet
+```
+
+```python
 HesitantFuzzySet(
     membership_values: List[float]
 )
 ```
 
 ### Intuitionistic Fuzzy Sets
+
+```python
+from mcdm_kit.fuzz import IntuitionisticFuzzySet
+```
 
 ```python
 IntuitionisticFuzzySet(
@@ -365,6 +433,10 @@ IntuitionisticFuzzySet(
 ### Pythagorean Fuzzy Sets
 
 ```python
+from mcdm_kit.fuzz import PythagoreanFuzzySet
+```
+
+```python
 PythagoreanFuzzySet(
     membership: float,
     non_membership: float
@@ -372,6 +444,10 @@ PythagoreanFuzzySet(
 ```
 
 ### Spherical Fuzzy Sets
+
+```python
+from mcdm_kit.fuzz import SphericalFuzzySet
+```
 
 ```python
 SphericalFuzzySet(
@@ -384,6 +460,10 @@ SphericalFuzzySet(
 ### Neutrosophic Sets
 
 ```python
+from mcdm_kit.fuzz import NeutrosophicSet
+```
+
+```python
 NeutrosophicSet(
     truth: float,
     indeterminacy: float,
@@ -392,6 +472,10 @@ NeutrosophicSet(
 ```
 
 ### Type-2 Fuzzy Sets
+
+```python
+from mcdm_kit.fuzz import Type2FuzzySet
+```
 
 ```python
 Type2FuzzySet(
@@ -405,6 +489,17 @@ Type2FuzzySet(
 
 ### Distance Calculations
 
+```python
+from mcdm_kit.utils.distance import (
+    euclidean_distance,
+    manhattan_distance,
+    hamming_distance,
+    cosine_similarity,
+    fuzzy_distance,
+    weighted_distance
+)
+```
+
 -   `euclidean_distance(x: np.ndarray, y: np.ndarray)`: Euclidean distance
 -   `manhattan_distance(x: np.ndarray, y: np.ndarray)`: Manhattan distance
 -   `hamming_distance(x: np.ndarray, y: np.ndarray)`: Hamming distance
@@ -414,6 +509,15 @@ Type2FuzzySet(
 
 ### Normalization Methods
 
+```python
+from mcdm_kit.utils.normalization import (
+    normalize_matrix,
+    _vector_normalization,
+    _minmax_normalization,
+    _sum_normalization
+)
+```
+
 -   `normalize_matrix(matrix: np.ndarray, criteria_types: List[str], method: str = 'vector')`: Matrix normalization
 -   `_vector_normalization(matrix: np.ndarray)`: Vector normalization
 -   `_minmax_normalization(matrix: np.ndarray, criteria_types: List[str])`: Min-max normalization
@@ -422,6 +526,10 @@ Type2FuzzySet(
 ## Data Handling
 
 ### Data Loading
+
+```python
+from mcdm_kit.data.loader import load_from_csv
+```
 
 ```python
 load_from_csv(
@@ -436,7 +544,89 @@ load_from_csv(
 
 ### Matrix Operations
 
+```python
+from mcdm_kit.data import (
+    validate_matrix,
+    validate_weights,
+    validate_criteria_types,
+    validate_fuzzy_values
+)
+```
+
 -   `validate_matrix(matrix: np.ndarray)`: Validates matrix structure
 -   `validate_weights(weights: List[float], n_criteria: int)`: Validates weights
 -   `validate_criteria_types(criteria_types: List[str], n_criteria: int)`: Validates criteria types
 -   `validate_fuzzy_values(matrix: np.ndarray, fuzzy_type: Union[str, Type[BaseFuzzySet]])`: Validates fuzzy values
+
+### PFS-CIMAS-ARTASI Usage Example
+
+This example demonstrates how to use Picture Fuzzy Sets (PFS) with CIMAS and ARTASI methods for multi-criteria decision making.
+
+```python
+import numpy as np
+from mcdm_kit.data import DecisionMatrix
+from mcdm_kit.fuzz import PictureFuzzySet
+from mcdm_kit.core import CIMAS, ARTASI
+
+# Define the decision matrix with Picture Fuzzy Sets
+matrix = [
+    # C1    C2    C3    C4    C5
+    [(0.6, 0.2, 0.1), (0.7, 0.1, 0.1), (0.5, 0.3, 0.1), (0.6, 0.2, 0.1), (0.7, 0.1, 0.1)],  # A1
+    [(0.5, 0.3, 0.1), (0.6, 0.2, 0.1), (0.7, 0.1, 0.1), (0.5, 0.3, 0.1), (0.6, 0.2, 0.1)],  # A2
+    [(0.7, 0.1, 0.1), (0.5, 0.3, 0.1), (0.6, 0.2, 0.1), (0.7, 0.1, 0.1), (0.5, 0.3, 0.1)],  # A3
+    [(0.6, 0.2, 0.1), (0.7, 0.1, 0.1), (0.5, 0.3, 0.1), (0.6, 0.2, 0.1), (0.7, 0.1, 0.1)],  # A4
+    [(0.5, 0.3, 0.1), (0.6, 0.2, 0.1), (0.7, 0.1, 0.1), (0.5, 0.3, 0.1), (0.6, 0.2, 0.1)]   # A5
+]
+
+# Define alternatives and criteria
+alternatives = ['A1', 'A2', 'A3', 'A4', 'A5']
+criteria = ['C1', 'C2', 'C3', 'C4', 'C5']
+
+# Define criteria types (benefit or cost)
+criteria_types = ['benefit', 'benefit', 'benefit', 'benefit', 'benefit']
+
+# Define weights for criteria
+weights = [0.2, 0.2, 0.2, 0.2, 0.2]
+
+# Create decision matrix with Picture Fuzzy Sets
+dm = DecisionMatrix(
+    decision_matrix=matrix,
+    alternatives=alternatives,
+    criteria=criteria,
+    criteria_types=criteria_types,
+    weights=weights,
+    fuzzy=PictureFuzzySet
+)
+
+# Apply CIMAS method
+cimas = CIMAS(dm)
+cimas_rankings, cimas_scores = cimas.rank()
+
+# Apply ARTASI method
+artasi = ARTASI(dm)
+artasi_rankings, artasi_scores = artasi.rank()
+
+# Print results
+print("\nCIMAS Results:")
+for alt, rank, score in zip(alternatives, cimas_rankings, cimas_scores):
+    print(f"{alt}: Rank {rank}, Score {score:.4f}")
+
+print("\nARTASI Results:")
+for alt, rank, score in zip(alternatives, artasi_rankings, artasi_scores):
+    print(f"{alt}: Rank {rank}, Score {score:.4f}")
+```
+
+This example shows:
+
+1. How to create a decision matrix using Picture Fuzzy Sets
+2. How to define alternatives, criteria, criteria types, and weights
+3. How to apply both CIMAS and ARTASI methods to the same decision matrix
+4. How to interpret and display the results
+
+The Picture Fuzzy Sets in this example are represented as tuples of (membership, neutral, non-membership) values, where:
+
+-   membership: degree of positive membership
+-   neutral: degree of neutral membership
+-   non-membership: degree of negative membership
+
+Each value in the tuple must be between 0 and 1, and their sum must not exceed 1.

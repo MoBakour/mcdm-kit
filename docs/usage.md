@@ -66,6 +66,68 @@ dm = DecisionMatrix.from_csv(
 )
 ```
 
+## Working with Fuzzy Sets
+
+MCDM Kit supports various types of fuzzy sets. There are two ways to create a fuzzy decision matrix:
+
+### Method 1: Using Pre-constructed Fuzzy Sets
+
+```python
+from mcdm_kit.fuzz import PictureFuzzySet
+from mcdm_kit.data import DecisionMatrix
+
+# Create a matrix of Picture Fuzzy Sets
+matrix = [
+    [PictureFuzzySet(0.8, 0.1, 0.1), PictureFuzzySet(0.7, 0.2, 0.1)],
+    [PictureFuzzySet(0.6, 0.3, 0.1), PictureFuzzySet(0.8, 0.1, 0.1)]
+]
+
+# Create the decision matrix
+dm = DecisionMatrix(
+    decision_matrix=matrix,
+    alternatives=['A1', 'A2'],
+    criteria=['C1', 'C2'],
+    criteria_types=['benefit', 'benefit'],
+    fuzzy='PFS'  # Specify fuzzy type using string
+)
+```
+
+### Method 2: Using Raw Values and Fuzzy Set Constructor
+
+```python
+from mcdm_kit.fuzz import PictureFuzzySet
+from mcdm_kit.data import DecisionMatrix
+
+# Create a matrix of raw values
+matrix = [
+    [(0.8, 0.1, 0.1), (0.7, 0.2, 0.1)],
+    [(0.6, 0.3, 0.1), (0.8, 0.1, 0.1)]
+]
+
+# Create the decision matrix
+dm = DecisionMatrix(
+    decision_matrix=matrix,
+    alternatives=['A1', 'A2'],
+    criteria=['C1', 'C2'],
+    criteria_types=['benefit', 'benefit'],
+    fuzzy=PictureFuzzySet  # Pass the fuzzy set constructor directly
+)
+```
+
+### Getting Fuzzy Details
+
+You can get detailed information about the fuzzy sets in your matrix:
+
+```python
+# Get fuzzy details
+fuzzy_details = dm.get_fuzzy_details()
+print("Fuzzy Details:", fuzzy_details)
+
+# Get fuzzy distances
+fuzzy_distances = dm.get_fuzzy_distances()
+print("Fuzzy Distances:", fuzzy_distances)
+```
+
 ## Using MCDM Methods
 
 MCDM Kit provides various methods for solving decision problems. Here's an example using the TOPSIS method:
@@ -94,34 +156,6 @@ results = topsis.rank()
 # Print results
 print("Rankings:", results['rankings'])
 print("Scores:", results['scores'])
-```
-
-## Working with Fuzzy Sets
-
-MCDM Kit supports various types of fuzzy sets. Here's an example using Picture Fuzzy Sets:
-
-```python
-from mcdm_kit.fuzz import PictureFuzzySet
-from mcdm_kit.data import DecisionMatrix
-
-# Create a matrix of Picture Fuzzy Sets
-matrix = [
-    [PictureFuzzySet(0.8, 0.1, 0.1), PictureFuzzySet(0.7, 0.2, 0.1)],
-    [PictureFuzzySet(0.6, 0.3, 0.1), PictureFuzzySet(0.8, 0.1, 0.1)]
-]
-
-# Create the decision matrix
-dm = DecisionMatrix(
-    decision_matrix=matrix,
-    alternatives=['A1', 'A2'],
-    criteria=['C1', 'C2'],
-    criteria_types=['benefit', 'benefit'],
-    fuzzy_type='PFS'
-)
-
-# Get fuzzy details
-fuzzy_details = dm.get_fuzzy_details()
-print("Fuzzy Details:", fuzzy_details)
 ```
 
 ## Advanced Usage

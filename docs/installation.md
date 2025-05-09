@@ -21,7 +21,7 @@ pip install mcdm_kit
 If you want to install the package in development mode, you can clone the repository and install it locally:
 
 ```bash
-git clone https://github.com/yourusername/mcdm_kit.git
+git clone https://github.com/MoBakour/mcdm_kit.git
 cd mcdm_kit
 pip install -e .
 ```

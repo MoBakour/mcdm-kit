@@ -4,7 +4,7 @@ Decision Matrix class for handling MCDM data structures.
 
 import numpy as np
 import pandas as pd
-from typing import List, Dict, Union, Optional, Tuple, Any
+from typing import List, Dict, Union, Optional, Tuple, Any, Type
 from ..fuzz.picture import PictureFuzzySet
 from ..fuzz.base import BaseFuzzySet
 from ..fuzz.interval import IntervalFuzzySet
@@ -21,13 +21,16 @@ FUZZY_TYPE_MAP = {
     'PFS': PictureFuzzySet,
     'IFS': IntervalFuzzySet,
     'T2FS': Type2FuzzySet,
-    'INFS': IntuitionisticFuzzySet,  # Changed from IFS to avoid duplicate key
+    'INFS': IntuitionisticFuzzySet,
     'SFS': SphericalFuzzySet,
     'NFS': NeutrosophicSet,
-    'PYFS': PythagoreanFuzzySet,  # Changed from PFS to avoid duplicate key
+    'PYFS': PythagoreanFuzzySet,
     'FFS': FermateanFuzzySet,
     'HFS': HesitantFuzzySet
 }
+
+# Reverse map for class to type string lookup
+FUZZY_CLASS_MAP = {cls: type_str for type_str, cls in FUZZY_TYPE_MAP.items()}
 
 class DecisionMatrix:
     """Class for handling decision matrices in MCDM problems."""
@@ -37,7 +40,7 @@ class DecisionMatrix:
                  alternatives: Optional[List[str]] = None,
                  criteria: Optional[List[str]] = None,
                  criteria_types: Optional[List[str]] = None,
-                 fuzzy_type: Optional[str] = None):
+                 fuzzy: Optional[Union[str, Type[BaseFuzzySet]]] = None):
         """
         Initialize the decision matrix.
         
@@ -46,34 +49,43 @@ class DecisionMatrix:
             alternatives: List of alternative names
             criteria: List of criterion names
             criteria_types: List of criterion types ('benefit' or 'cost')
-            fuzzy_type: Type of fuzzy set ('PFS', 'IFS', 'T2FS', 'INFS', 'SFS', 'NFS', 'PYFS', 'FFS', 'HFS')
+            fuzzy: Either a string indicating fuzzy type ('PFS', 'IFS', etc.) or a fuzzy set constructor class
         """
-        self.fuzzy_type = fuzzy_type
+        self.fuzzy = fuzzy
         self._raw_matrix = decision_matrix
         
-        if fuzzy_type:
-            if fuzzy_type not in FUZZY_TYPE_MAP:
-                raise ValueError(f"Unsupported fuzzy type: {fuzzy_type}. Supported types: {list(FUZZY_TYPE_MAP.keys())}")
-            self._init_fuzzy_matrix(decision_matrix, alternatives, criteria, criteria_types)
+        if fuzzy:
+            if isinstance(fuzzy, str):
+                if fuzzy not in FUZZY_TYPE_MAP:
+                    raise ValueError(f"Unsupported fuzzy type: {fuzzy}. Supported types: {list(FUZZY_TYPE_MAP.keys())}")
+                self.fuzzy = fuzzy
+                self.fuzzy_class = FUZZY_TYPE_MAP[fuzzy]
+                self._init_fuzzy_matrix_from_objects(decision_matrix, alternatives, criteria, criteria_types)
+            else:
+                # Assume it's a fuzzy set constructor class
+                if not issubclass(fuzzy, BaseFuzzySet):
+                    raise ValueError(f"Invalid fuzzy set constructor: {fuzzy}. Must be a subclass of BaseFuzzySet")
+                if fuzzy not in FUZZY_CLASS_MAP:
+                    raise ValueError(f"Unsupported fuzzy set class: {fuzzy.__name__}. Supported classes: {list(FUZZY_TYPE_MAP.values())}")
+                self.fuzzy = FUZZY_CLASS_MAP[fuzzy]
+                self.fuzzy_class = fuzzy
+                self._init_fuzzy_matrix_from_tuples(decision_matrix, alternatives, criteria, criteria_types)
         else:
             self._init_numerical_matrix(decision_matrix, alternatives, criteria, criteria_types)
             
         self._validate()
     
-    def _init_fuzzy_matrix(self, 
-                          decision_matrix: List[List[Any]],
-                          alternatives: Optional[List[str]],
-                          criteria: Optional[List[str]],
-                          criteria_types: Optional[List[str]]):
-        """Initialize matrix with fuzzy sets."""
+    def _init_fuzzy_matrix_from_objects(self, 
+                                      decision_matrix: List[List[Any]],
+                                      alternatives: Optional[List[str]],
+                                      criteria: Optional[List[str]],
+                                      criteria_types: Optional[List[str]]):
+        """Initialize matrix with pre-constructed fuzzy set objects."""
         if not isinstance(decision_matrix, (list, np.ndarray)):
             raise ValueError("Fuzzy matrix must be a 2D list or array")
             
         # Convert to numpy array of fuzzy sets
         self.fuzzy_matrix = np.array(decision_matrix, dtype=object)
-        
-        # Get expected fuzzy set type
-        expected_type = FUZZY_TYPE_MAP[self.fuzzy_type]
         
         # Create numerical matrix for calculations
         self.matrix = np.zeros_like(self.fuzzy_matrix, dtype=float)
@@ -82,14 +94,50 @@ class DecisionMatrix:
                 fuzzy_set = self.fuzzy_matrix[i, j]
                 if not isinstance(fuzzy_set, BaseFuzzySet):
                     raise ValueError(f"Invalid fuzzy set at position ({i}, {j})")
-                if not isinstance(fuzzy_set, expected_type):
-                    raise ValueError(f"Mixed fuzzy set types detected. Expected {expected_type.__name__}, got {type(fuzzy_set).__name__} at position ({i}, {j})")
+                if not isinstance(fuzzy_set, self.fuzzy_class):
+                    raise ValueError(f"Mixed fuzzy set types detected. Expected {self.fuzzy_class.__name__}, got {type(fuzzy_set).__name__} at position ({i}, {j})")
                 self.matrix[i, j] = fuzzy_set.score()
         
         # Set metadata
         self.alternatives = alternatives or [f"Alt_{i+1}" for i in range(len(self.matrix))]
         self.criteria = criteria or [f"Criterion_{i+1}" for i in range(self.matrix.shape[1])]
         self.criteria_types = criteria_types or ['benefit'] * len(self.criteria)
+    
+    def _init_fuzzy_matrix_from_tuples(self,
+                                      decision_matrix: List[List[Tuple]],
+                                      alternatives: Optional[List[str]],
+                                      criteria: Optional[List[str]],
+                                      criteria_types: Optional[List[str]]):
+        """Initialize matrix by constructing fuzzy sets from tuples."""
+        if not isinstance(decision_matrix, (list, np.ndarray)):
+            raise ValueError("Fuzzy matrix must be a 2D list or array")
+            
+        # Set metadata first to avoid attribute errors
+        self.alternatives = alternatives or [f"Alt_{i+1}" for i in range(len(decision_matrix))]
+        self.criteria = criteria or [f"Criterion_{i+1}" for i in range(len(decision_matrix[0]))]
+        self.criteria_types = criteria_types or ['benefit'] * len(self.criteria)
+            
+        # Create empty arrays for both fuzzy sets and numerical values
+        shape = (len(decision_matrix), len(decision_matrix[0]))
+        self.fuzzy_matrix = np.empty(shape, dtype=object)
+        self.matrix = np.zeros(shape, dtype=float)
+        
+        # Convert values to fuzzy sets
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                values = decision_matrix[i][j]
+                # Handle both tuples and numpy arrays
+                if isinstance(values, np.ndarray):
+                    values = tuple(values)
+                elif not isinstance(values, tuple):
+                    raise ValueError(f"Invalid fuzzy set values at position ({i}, {j}). Expected tuple or numpy array, got {type(values)}")
+                
+                try:
+                    fuzzy_set = self.fuzzy_class(*values)
+                    self.fuzzy_matrix[i, j] = fuzzy_set
+                    self.matrix[i, j] = fuzzy_set.score()
+                except Exception as e:
+                    raise ValueError(f"Failed to create fuzzy set at position ({i}, {j}): {str(e)}")
     
     def _init_numerical_matrix(self,
                               decision_matrix: Union[np.ndarray, pd.DataFrame],
@@ -130,7 +178,7 @@ class DecisionMatrix:
         Returns:
             Optional[Dict]: Nested dictionary of fuzzy details or None if not fuzzy
         """
-        if not self.fuzzy_type:
+        if not self.fuzzy:
             return None
             
         details = {}
@@ -149,7 +197,7 @@ class DecisionMatrix:
         Returns:
             Optional[Dict]: Dictionary of distances or None if not fuzzy
         """
-        if not self.fuzzy_type:
+        if not self.fuzzy:
             return None
             
         distances = {}
@@ -171,7 +219,7 @@ class DecisionMatrix:
                   alternatives: Optional[List[str]] = None,
                   criteria: Optional[List[str]] = None,
                   criteria_types: Optional[List[str]] = None,
-                  fuzzy_type: Optional[str] = None) -> 'DecisionMatrix':
+                  fuzzy: Optional[Union[str, Type[BaseFuzzySet]]] = None) -> 'DecisionMatrix':
         """
         Create a DecisionMatrix from a 2D array.
         
@@ -180,18 +228,19 @@ class DecisionMatrix:
             alternatives: List of alternative names
             criteria: List of criterion names
             criteria_types: List of criterion types
-            fuzzy_type: Type of fuzzy set ('PFS', 'IFS', 'T2FS', 'SFS', 'NFS', 'PFS', 'FFS', 'HFS')
+            fuzzy: Either a string indicating fuzzy type or a fuzzy set constructor class
             
         Returns:
             DecisionMatrix: New DecisionMatrix instance
         """
-        return cls(array, alternatives, criteria, criteria_types, fuzzy_type)
+        return cls(array, alternatives, criteria, criteria_types, fuzzy)
     
     @classmethod
     def from_csv(cls, 
                 filepath: str,
                 alternatives_col: Optional[str] = None,
-                criteria_types: Optional[List[str]] = None) -> 'DecisionMatrix':
+                criteria_types: Optional[List[str]] = None,
+                fuzzy: Optional[Union[str, Type[BaseFuzzySet]]] = None) -> 'DecisionMatrix':
         """
         Create a DecisionMatrix from a CSV file.
         
@@ -199,6 +248,7 @@ class DecisionMatrix:
             filepath (str): Path to the CSV file
             alternatives_col (Optional[str]): Column name containing alternative names
             criteria_types (Optional[List[str]]): List of criterion types
+            fuzzy (Optional[Union[str, Type[BaseFuzzySet]]]): Either a string indicating fuzzy type or a fuzzy set constructor class
             
         Returns:
             DecisionMatrix: New DecisionMatrix instance
@@ -211,7 +261,7 @@ class DecisionMatrix:
         else:
             alternatives = None
             
-        return cls(df, alternatives=alternatives, criteria_types=criteria_types)
+        return cls(df, alternatives=alternatives, criteria_types=criteria_types, fuzzy=fuzzy)
     
     def to_dataframe(self) -> pd.DataFrame:
         """
@@ -220,7 +270,7 @@ class DecisionMatrix:
         Returns:
             pd.DataFrame: DataFrame representation of the decision matrix
         """
-        if self.fuzzy_type:
+        if self.fuzzy:
             # Convert fuzzy sets to their string representation
             display_matrix = np.array([[str(x) for x in row] for row in self.fuzzy_matrix])
         else:
@@ -250,10 +300,10 @@ class DecisionMatrix:
     
     def __str__(self) -> str:
         """String representation of the decision matrix."""
-        fuzzy_info = f", fuzzy_type={self.fuzzy_type}" if self.fuzzy_type else ""
+        fuzzy_info = f", fuzzy={self.fuzzy}" if self.fuzzy else ""
         return f"DecisionMatrix(alternatives={len(self.alternatives)}, criteria={len(self.criteria)}{fuzzy_info})"
     
     def __repr__(self) -> str:
         """Detailed string representation of the decision matrix."""
-        fuzzy_info = f", fuzzy_type={self.fuzzy_type}" if self.fuzzy_type else ""
+        fuzzy_info = f", fuzzy={self.fuzzy}" if self.fuzzy else ""
         return f"DecisionMatrix(decision_matrix={self.matrix.shape}, alternatives={self.alternatives}, criteria={self.criteria}{fuzzy_info})"

@@ -44,7 +44,7 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/MoBakour/mcdm-kit"
 Documentation = ""
-Repository = "https://github.com/yourusername/mcdm-kit.git"
+Repository = "https://github.com/MoBakour/mcdm-kit.git"
 Issues = "https://github.com/MoBakour/mcdm-kit/issues"
 
 [tool.pytest.ini_options]

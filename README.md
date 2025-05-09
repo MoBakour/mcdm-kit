@@ -95,6 +95,41 @@ dm = DecisionMatrix(
 )
 ```
 
+### Using AROMAN with Fuzzy Sets
+
+```python
+from mcdm_kit.core import AROMAN
+from mcdm_kit.fuzz import FermateanFuzzySet
+from mcdm_kit.data import DecisionMatrix
+
+# Create a matrix with Fermatean fuzzy values
+matrix = [
+    [(0.8, 0.3), (0.7, 0.4), (0.9, 0.2)],
+    [(0.6, 0.5), (0.8, 0.3), (0.7, 0.4)],
+    [(0.9, 0.2), (0.6, 0.5), (0.8, 0.3)]
+]
+
+# Create decision matrix with Fermatean fuzzy sets
+dm = DecisionMatrix(
+    decision_matrix=matrix,
+    alternatives=['A1', 'A2', 'A3'],
+    criteria=['C1', 'C2', 'C3'],
+    criteria_types=['benefit', 'benefit', 'cost'],
+    fuzzy=FermateanFuzzySet
+)
+
+# Apply AROMAN method
+weights = [0.4, 0.3, 0.3]
+aroman = AROMAN(dm, weights=weights)
+
+# Get results
+scores = aroman.calculate_scores()
+rankings = aroman.rank()
+
+print("Scores:", scores)
+print("Rankings:", rankings)
+```
+
 ## Supported MCDM Methods
 
 -   TOPSIS (Technique for Order Preference by Similarity to an Ideal Solution)
@@ -105,6 +140,7 @@ dm = DecisionMatrix(
 -   MABAC (Multi-Attributive Border Approximation Area Comparison)
 -   ARLON (Analytical Ranking with Linear Ordering)
 -   DEMATEL (Decision Making Trial and Evaluation Laboratory)
+-   AROMAN (Additive Ratio Assessment with Multiple Criteria)
 
 ## Supported Fuzzy Set Types
 

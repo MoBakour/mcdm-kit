@@ -43,8 +43,9 @@ To get started with MCDM Kit, check out the following sections:
 
 1. [Installation](installation.md) - Learn how to install the library
 2. [Usage](usage.md) - Basic usage examples and tutorials
-3. [API Reference](api.md) - Detailed API documentation
-4. [Examples](examples.md) - Example problems and solutions
+3. [Examples](examples.md) - Example problems and solutions
+4. [Methods](methods.md) - MCDM methods documentation
+5. [Fuzzy Sets](fuzzy_sets.md) - Fuzzy sets documentation
 
 ## Contributing
 

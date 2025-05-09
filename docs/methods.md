@@ -12,6 +12,7 @@ This document provides a comprehensive overview of all MCDM methods implemented 
 6. [MABAC](#mabac)
 7. [ARLON](#arlon)
 8. [DEMATEL](#dematel)
+9. [AROMAN](#aroman)
 
 ## TOPSIS
 
@@ -279,6 +280,40 @@ dematel = DEMATEL(
 
 # Get analysis results
 results = dematel.rank()
+```
+
+## AROMAN
+
+**Additive Ratio Assessment with Multiple Criteria**
+
+AROMAN is a comprehensive MCDM method that evaluates alternatives based on their relative distances from ideal and anti-ideal solutions, with support for both crisp and fuzzy values.
+
+### Key Features
+
+-   Normalizes and weights decision matrix
+-   Evaluates alternatives using ideal solutions
+-   Supports both crisp and fuzzy values
+-   Handles benefit and cost criteria
+
+### Usage
+
+```python
+from mcdm_kit.core import AROMAN
+from mcdm_kit.data import DecisionMatrix
+
+# Create decision matrix (crisp values)
+matrix = DecisionMatrix(...)
+
+# Initialize AROMAN
+aroman = AROMAN(
+    decision_matrix=matrix,
+    weights=None,  # Optional: provide custom weights
+    criteria_types=None  # Optional: specify criteria types
+)
+
+# Get scores and rankings
+scores = aroman.calculate_scores()
+rankings = aroman.rank()
 ```
 
 ## Common Features

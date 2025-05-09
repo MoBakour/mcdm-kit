@@ -11,6 +11,7 @@ from .wenslo import WENSLO
 from .wisp import WISP
 from .arlon import ARLON
 from .dematel import DEMATEL
+from .aroman import AROMAN
 
 __all__ = [
     'BaseMCDMMethod',
@@ -21,5 +22,6 @@ __all__ = [
     'WENSLO',
     'WISP',
     'ARLON',
-    'DEMATEL'
+    'DEMATEL',
+    'AROMAN'
 ] 

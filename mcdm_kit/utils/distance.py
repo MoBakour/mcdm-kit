@@ -94,4 +94,24 @@ def weighted_distance(x: np.ndarray,
     Returns:
         float: Weighted distance
     """
-    return np.power(np.sum(weights * np.power(np.abs(x - y), p)), 1/p) 
+    return np.power(np.sum(weights * np.power(np.abs(x - y), p)), 1/p)
+
+def calculate_euclidean_distance(x: Union[List[float], np.ndarray], 
+                               y: Union[List[float], np.ndarray]) -> float:
+    """
+    Calculate Euclidean distance between two vectors.
+    
+    Args:
+        x: First vector
+        y: Second vector
+        
+    Returns:
+        float: Euclidean distance between x and y
+    """
+    x = np.array(x)
+    y = np.array(y)
+    
+    if x.shape != y.shape:
+        raise ValueError("Vectors must have the same shape")
+        
+    return np.sqrt(np.sum((x - y) ** 2)) 

@@ -25,7 +25,7 @@ criteria = ['C1', 'C2', 'C3', 'C4']
 criteria_types = ['benefit', 'benefit', 'benefit', 'cost']
 
 dm = DecisionMatrix(
-    matrix=matrix,
+    decision_matrix=matrix,
     alternatives=alternatives,
     criteria=criteria,
     criteria_types=criteria_types
@@ -48,7 +48,7 @@ df = pd.DataFrame({
 
 # Create the decision matrix
 dm = DecisionMatrix(
-    matrix=df,
+    decision_matrix=df,
     criteria_types=['benefit', 'benefit', 'benefit', 'cost']
 )
 ```
@@ -81,7 +81,7 @@ matrix = np.array([
 ])
 
 dm = DecisionMatrix(
-    matrix=matrix,
+    decision_matrix=matrix,
     alternatives=['A1', 'A2', 'A3'],
     criteria=['C1', 'C2', 'C3', 'C4'],
     criteria_types=['benefit', 'benefit', 'benefit', 'cost']
@@ -112,7 +112,7 @@ matrix = [
 
 # Create the decision matrix
 dm = DecisionMatrix(
-    matrix=matrix,
+    decision_matrix=matrix,
     alternatives=['A1', 'A2'],
     criteria=['C1', 'C2'],
     criteria_types=['benefit', 'benefit'],

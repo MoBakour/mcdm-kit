@@ -256,4 +256,4 @@ class DecisionMatrix:
     def __repr__(self) -> str:
         """Detailed string representation of the decision matrix."""
         fuzzy_info = f", fuzzy_type={self.fuzzy_type}" if self.fuzzy_type else ""
-        return f"DecisionMatrix(matrix={self.matrix.shape}, alternatives={self.alternatives}, criteria={self.criteria}{fuzzy_info})" 
+        return f"DecisionMatrix(decision_matrix={self.matrix.shape}, alternatives={self.alternatives}, criteria={self.criteria}{fuzzy_info})"

@@ -32,7 +32,7 @@ expert_weights = np.array([0.5, 0.3, 0.2])  # Must sum to 1
 
 # Step 4: Create DecisionMatrix instances for each expert
 expert_dms = [
-    DecisionMatrix(matrix=matrix, alternatives=alternatives, criteria=criteria, criteria_types=criteria_types)
+    DecisionMatrix(decision_matrix=matrix, alternatives=alternatives, criteria=criteria, criteria_types=criteria_types)
     for matrix in expert_matrices
 ]
 
@@ -45,7 +45,7 @@ weighted_matrix = np.tensordot(expert_weights, stacked, axes=1)
 
 # Step 6: Create the final aggregated DecisionMatrix
 group_dm = DecisionMatrix(
-    matrix=weighted_matrix,
+    decision_matrix=weighted_matrix,
     alternatives=alternatives,
     criteria=criteria,
     criteria_types=criteria_types

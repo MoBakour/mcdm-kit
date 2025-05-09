@@ -17,7 +17,7 @@ weights = np.array([0.5, 0.5])  # Example equal weighting
 
 # Step 1: Create the fuzzy decision matrix
 dm = DecisionMatrix(
-    matrix=pfs_matrix,
+    decision_matrix=pfs_matrix,
     alternatives=alternatives,
     criteria=criteria,
     criteria_types=criteria_types,
